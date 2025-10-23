@@ -2,7 +2,7 @@
 Real-world downscaled FastEddy simulation with buildings
 ========================================================
 
-This tutorial involves setting up a real-world downscaled simulation that includes resolved buildings and closely follows the same procedure outlined in section 4.1. Additional steps for including buildings are described below and all required input datasets to run this tutorial are provided in this Zenodo record [TO BE UPDATED].
+This tutorial involves setting up a real-world downscaled simulation that includes resolved buildings and closely follows the same procedure outlined in section 4.1. Additional steps for including buildings are described below and all required input datasets to run this tutorial are provided in this `Zenodo record <https://zenodo.org/records/17419234>`_.
 
 In the *GeoSpec* preprocessing step, and additional 2d field describing building heights above ground level is required in the georeference input NetCDF file.
 
@@ -27,7 +27,7 @@ The urban model capability has been implemented into FastEddy as an extension mo
 
    make WITH_URBAN=1
 
-The model used to represent buildings follows the immersed body force approach described in *Muñoz-Esparza et al., 2020*, and the tutorial case corresponds to the passage of a cold front (*Muñoz-Esparza et al. (2021, 2025)*. The figure below shows instantaneous wind speed and vertical velocity fields corresponding to 30min hindcast valid at 1500 UTC on November 11th 2011 (pre-frontal conditions). These horizontal contours are from the model's third vertical level, located at approximately 23 m above ground level.
+The model used to represent buildings follows the immersed body force approach described in *Muñoz-Esparza et al., 2020*, and the tutorial case corresponds to the passage of a cold front (*Muñoz-Esparza et al. (2021, 2025)*. The figure below shows instantaneous wind speed and vertical velocity fields corresponding to 30min hindcast valid at 1500 UTC on November 11th 2019 (pre-frontal conditions). These horizontal contours are from the model's third vertical level, located at approximately 23 m above ground level.
 
 .. image:: ../images/URBAN_tutorial_nz2_2panel.png
   :width: 900
