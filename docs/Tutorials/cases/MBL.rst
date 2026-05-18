@@ -18,7 +18,7 @@ Input parameters
 * Surface potential temperature: :math:`299.1` K
 * Surface sensible heat flux: :math:`8 \times 10^{-3}` K m :math:`\mbox{s}^{-1}`
 * Surface latent heat flux: :math:`5.2 \times 10^{-5}` m :math:`\mbox{s}^{-1}`
-* Surface roughness length: :math:`z_0=0.0002` m
+* Surface roughness length: :math:`z_0=0.001` m
 * Rayleigh damping layer: uppermost :math:`500` m of the domain
 * Initial perturbations: :math:`\pm 0.1` K
 * Depth of perturbations: :math:`1600` m
@@ -31,7 +31,7 @@ Input parameters
 Execute FastEddy
 ----------------
 
-Note that this example moist dynamics validation case example requires an additional dataset available as a gzip compressed tape archive file, *Moist_BOMEX.tar.gz*, at this `Zenodo record <https://zenodo.org/records/10982246>`_. The contents of the archive include an initial conditions file *FE_BOMEX.0*, which is needed to run FastEddy for this case. The archive dataset also contains results from the 11 models that participated in the original Siebesma et al. 2003 model intercomparison as NetCDF files.  The FastEddy code will write its output to an *output* subdirectory. Please create an *output* directory, if one does not already exist.
+Note that this example moist dynamics validation case example requires an additional dataset available as a gzip compressed tape archive file, *Moist_BOMEX.tar.gz*, at this `Zenodo record <https://zenodo.org/records/20273966>`_. The contents of the archive include an initial conditions file *FE_BOMEX.0*, which is needed to run FastEddy for this case. The archive dataset also contains results from the 11 models that participated in the original Siebesma et al. 2003 model intercomparison as NetCDF files.  The FastEddy code will write its output to an *output* subdirectory. Please create an *output* directory, if one does not already exist.
 
 1. Create a working directory to run the FastEddy tutorials and change to that directory.
 2. Create a **Example04_BOMEX** subdirectory and change to that directory.

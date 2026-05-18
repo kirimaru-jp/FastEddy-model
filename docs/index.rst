@@ -40,6 +40,8 @@ web: https://ral.ucar.edu/, email: fasteddy@ucar.edu
   * Jeremy Sauer 
   * Domingo Muñoz-Esparza
   * Julie Prestopnik
+  * Eloisa Raluy-López
+  * Will Mayfield
   * Eric Hendricks
 
 Building FastEddy on AMD GPUs: Fluid Numerics
@@ -56,5 +58,9 @@ web: https://fluidnumerics.com, email: support@fluidnumerics.com
    downloads.rst
    build_run.rst
    Tutorials/index
+   contributions.rst
+   pre-processing_parameters.rst
+   efficient_output.rst
    parameters.rst
    publications.rst
+   feedback_updates.rst

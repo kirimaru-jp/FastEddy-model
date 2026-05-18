@@ -56,7 +56,7 @@ If the JSON file option *save_plot_opt* is set to 1, then a plot will be produce
 
 SimGrid
 -------
-The second preprocessing step is **SimGrid.py**. The purpose of this step is to set up a FastEddy grid over a domain located within the area covered by the GIS file generated with *GeoSpec.py*. The location of the center of the FastEddy domain is specified in the **simgrid.json** file by the parameters *center_lat* and *center_lon*. The number of points in each direction (:code:`Nx`, :code:`Ny`, :code:`Nz`), grid spacings (:code:`d_xi`, :code:`d_eta`, :code:`d_zeta`), and vertical stretching parameters (:code:`verticalDeformFactor`, :code:`verticalDeformQuadCoeff`) required to set up a grid are read in from a FastEddy parameters file (*FE_params_file*). *SimGrid.py* performs decimation or interpolation between the *GeoSpec.py* output reference resolution and the parameter-specified grid spacing of the target FastEddy domain for surface fields, in addition to establishing a terrain following vertical coordinate grid. Once all the required input files are ready, **SimGrid.py** can be executed:
+The second preprocessing step is **SimGrid.py**. The purpose of this step is to set up a FastEddy grid over a domain located within the area covered by the GIS file generated with *GeoSpec.py*. The location of the center of the FastEddy domain is specified in the **simgrid.json** file by the parameters *center_lat* and *center_lon* (40.5948 and -105.1380 for this example). The number of points in each direction (:code:`Nx`, :code:`Ny`, :code:`Nz`), grid spacings (:code:`d_xi`, :code:`d_eta`, :code:`d_zeta`), and vertical stretching parameters (:code:`verticalDeformFactor`, :code:`verticalDeformQuadCoeff`) required to set up a grid are read in from a FastEddy parameters file (*FE_params_file*). *SimGrid.py* performs decimation or interpolation between the *GeoSpec.py* output reference resolution and the parameter-specified grid spacing of the target FastEddy domain for surface fields, in addition to establishing a terrain following vertical coordinate grid. Once all the required input files are ready, **SimGrid.py** can be executed:
 
 .. code-block:: none
 
@@ -118,3 +118,31 @@ With these additions, WRF will generate a set of timestamped *wrf_fasteddy_* fil
    python ./GenICBCs.py -f genicbcs.json
 
 Successful completion will create an initial condition file (*FE_interp_170000UTC.0*) and a set of boundary condition files (*FE_Bndys.**) where the index indicates the number of second increments from the initial time (frequency in seconds is specified by the parameter :code:`secInc` in **genicbcs.json**).
+
+Nested LES-to-LES with FastEddy input data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+**GenICBCs.py** has been extended to allow nesting within FastEddy LES model data. In order to enable that option, *parent_model* variable in **genicbcs.json** needs to be set to 1. In the case of using an idealized FastEddy simulation as the source input data (i.e., constant latitude and longitude throughout the domain), the variable *ideal_opt* needs to be activated, in order for the horizontal coordinates to be used as reference to locate the domain instead of geographic coordinates used for real cases. 
+
+.. note::
+
+   * The *parent_model* option needs to be set to 0 for WRF nesting and to 1 for nesting within FastEddy model data.
+   * The *nest_tke_opt* option allows for using TKE from the parent model as initial and boundary conditions. If not activated, a uniform value of 1.0e-10 m2/s2 is used (initial versions of the coupling capabilities preceding FastEddy v5.0).
+
+Addendum: Using MPAS model data as input
+----------------------------------------
+If one wishes to use MPAS model files as inputs to FastEddy, a series of steps may be performed to prepare the data for use before the **GenICBCs.py** preprocessing step. The required data from MPAS forecasts are the **history.YYYY-MM-DD_HH.mm.ss.nc**, **diag.YYYY-MM-DD_HH.mm.ss.nc**, and **init.nc** files. These files must first be converted from the MPAS unstructured grid to match the WRF lat-lon grid. Various tools are available to perform the interpolation, including `MPASSIT <https://github.com/NOAA-GSL/MPASSIT>`_. An example batch submission script, **run_mpassit.sh**, and variable lists, **varlists_mpassit_fasteddy**, are available in **scripts/batch_jobs/**, which can be configured with paths to MPAS outputs, a build of MPASSIT, and a set of run parameters to determine the date and time corresponding to input data. This batch submission script is run with
+
+.. code-block:: none
+
+   qsub run_mpassit.sh
+
+The resulting output will be named **proc.YYYY-MM-DD_HH.mm.ss.nc**. The proc files required to run this addendum are provided at this `MPAS Zenodo record <https://zenodo.org/records/19410452>`_.
+
+A further conversion step must then be performed in order to ensure that the variables output by MPAS match the requirements of **GenICBCs.py** and FastEddy. In this step, density and geopotential heights not provided in the standard MPAS output are derived and appended to the WRF-like output files created by MPASSIT. A conversion script is available in **scripts/python_utilities/coupler/**. You may configure **mpassit_to_fasteddy.py** with the input file **mpassit_to_fasteddy.json**, similar to the configuration of **genicbcs.json** by setting file name prefixes and date and time information for the ICBC data. The conversion script is run with 
+
+.. code-block:: none
+
+   python ./mpassit_to_fasteddy.py -f mpassit_to_fasteddy.json
+
+
+Once completed, the resulting output files should appear with a naming scheme that matches the WRF filename date formatting and can then be used as input to **GenICBCs.py** to generate FastEddy input data.
